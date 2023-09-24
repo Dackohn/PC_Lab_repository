@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include <stdbool.h> 
 #include<conio.h>
 #include <stdio.h>
 #include<time.h>
@@ -144,3 +144,17 @@ int main()
     getch();
     return 0;
 }
+/*input data 59	72	91	81	32
+            71	79	91	91	89
+            77	66	51	14	83
+            47	18	55	83	15
+            67	70	30	95	39
+            13	77	75	85	72 
+            80	78	13	97	62
+            42	81	44	28	3
+            3	45	50	16	32
+            36	31	88	32	86
+            41	51	77	81	77
+            2	86	3	50	28
+            33	9	68	1	68
+            20	43	52	74	34*/
