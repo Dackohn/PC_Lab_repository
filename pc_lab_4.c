@@ -19,7 +19,6 @@
         char string[256]="";
         char search[256]="";
         char temp[256]="";
-        char* start;
         int  j, k, z, num, cif = 0;
     
         while(1) 
@@ -28,6 +27,7 @@
             printf("The existing text: %s \n",buffer);
             printf("Enter your choice: ");
             scanf("%d",&enter);
+            char filename[100];
             switch (enter) {
                 case 1:
                     printf("Enter the text: ");
@@ -48,6 +48,7 @@
                             k=j;
                             z=0;
                             num=0;
+                            cif=0;
                             while (buffer[k]==search[z] && z < strlen(search))
                             {
                                 num +=1;
@@ -60,7 +61,7 @@
                             }
                         }
                     }
-                    printf("%d",cif);
+                    printf("word %s appears %d times",search,cif);
                     break;
                 case 3:
                     printf("write the word that must be replaced: ");
@@ -88,21 +89,14 @@
                                 {
                                 temp[z]=buffer[z];
                                 }
-                                temp[start - buffer] = '\0';
+                                temp[j] = '\0';
                                 strcat(temp,string);
-                                z=j+strlen(string)-1;
-                                for(k=j+strlen(search)-2;k<strlen(buffer);k++)
-                                {
-                                    temp[z]=buffer[k];
-                                }
+                                strcat(temp, buffer+j+strlen(search));
                                 for(k=0;k<strlen(buffer);k++)
                                 {
                                     buffer[k]='\0';
                                 }
-                                    for(k=0;k<strlen(temp);k++)
-                                {
-                                    buffer[k]=temp[k];
-                                }
+                                strcpy(buffer, temp);
                             }
                         }
                     }
@@ -111,6 +105,42 @@
                     for(k=0;k<strlen(buffer);k++)
                     {
                         buffer[k]='\0';
+                    }
+                    break;
+                case 5:
+                    printf("Enter the filename to save the text: ");
+                    scanf("%s", filename);
+                    FILE *file = fopen(filename, "w");
+                    if (file == NULL) 
+                    {
+                        printf("Failed to open the file for writing.\n");
+                    } 
+                    else 
+                    {
+                        fputs(buffer, file);
+                        fclose(file);
+                        printf("Text saved to %s.\n", filename);
+                    }
+                    break;
+                case 6:
+                    printf("Enter the filename to load text from: ");
+                    scanf("%s", filename);
+                    file = fopen(filename, "r");
+                    if (file == NULL) 
+                    {
+                        printf("Failed to open the file for reading.\n");
+                    } 
+                    else 
+                    {
+                        if (fgets(buffer, sizeof(buffer), file) != NULL) 
+                        {
+                            printf("Text loaded from %s.\n", filename);
+                        } 
+                        else 
+                        {
+                            printf("No text found in the file.\n");
+                        }
+                        fclose(file);
                     }
                     break;
                 case 7:
