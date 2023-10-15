@@ -27,6 +27,7 @@
             printf("The existing text: %s \n",buffer);
             printf("Enter your choice: ");
             scanf("%d",&enter);
+            printf("\n\n");
             char filename[100];
             switch (enter) {
                 case 1:
