@@ -10,16 +10,17 @@
         printf("4. Delete\n");
         printf("5. Save to File\n");
         printf("6. Load from File\n");
-        printf("7. Exit\n");
+        printf("7. Delete a Word\n");
+        printf("8. Exit\n");
     }
     int main()
     {
         int enter;
         char buffer[256]="";
-        char string[256]="";
-        char search[256]="";
+        char string[258]="";
+        char search[100]="";
         char temp[256]="";
-        int  j, k, z, num, cif = 0;
+        int  j, k, z, num, cif = 0; 
     
         while(1) 
         {
@@ -34,14 +35,23 @@
                     printf("Enter the text: ");
                     getchar();
                     fgets(string, sizeof(string), stdin);
-                    strcat(buffer, string); 
-                    buffer[strcspn(buffer, "\n")] = 0;
-                    strcat(buffer," ");
+                    if(strlen(buffer)+strlen(string)<sizeof(buffer))
+                    {
+                        strcat(buffer, string); 
+                        buffer[strcspn(buffer, "\n")] = 0;
+                        strcat(buffer," ");
+                    }
+                    else
+                    {
+                        printf("Not enough space");
+                    }
                     break;
                 case 2:
                     printf("write the word to search: ");
-                    scanf("%s",search);
-                    strcat(search," ");
+                    getchar();
+                    fgets(search, sizeof(search), stdin);
+                    search[strcspn(search, "\n")] = 0;
+                    cif=0;
                     for(j=0;j<strlen(buffer);j++)
                     {
                         if (buffer[j] == search[0] && (j==0 || buffer[j-1]==' '))
@@ -49,16 +59,16 @@
                             k=j;
                             z=0;
                             num=0;
-                            cif=0;
                             while (buffer[k]==search[z] && z < strlen(search))
                             {
                                 num +=1;
                                 k++;
                                 z++;
                             }
-                            if (num == strlen(search))
+                            if (num == strlen(search) && (j + strlen(search) == strlen(buffer) || buffer[j + strlen(search)] == ' '))
                             {
                                 cif++;
+                                j += strlen(search)-1;
                             }
                         }
                     }
@@ -66,40 +76,48 @@
                     break;
                 case 3:
                     printf("write the word that must be replaced: ");
-                    scanf("%s",search);
+                    getchar();
+                    fgets(search, sizeof(search), stdin);
+                    search[strcspn(search, "\n")] = 0;
                     printf("Write the world to replace with: ");
-                    scanf("%s",string);
-                    strcat(string," ");
-                    strcat(search," ");
-                    for(j=0;j<strlen(buffer);j++)
+                    fgets(string, sizeof(string), stdin);
+                    string[strcspn(string, "\n")] = 0;
+                    if(strlen(string)+strlen(buffer)-strlen(search)<sizeof(buffer))
                     {
-                        if (buffer[j] == search[0] && (j==0 || buffer[j-1]==' '))
+                        for(j=0;j<strlen(buffer);j++)
                         {
-                            k=j;
-                            z=0;
-                            num=0;
-                            while (buffer[k]==search[z] && z < strlen(search))
+                            if (buffer[j] == search[0] && (j==0 || buffer[j-1]==' '))
                             {
-                                num +=1;
-                                k++;
-                                z++;
-                            }
-                            if (num == strlen(search))
-                            {
-                                for(z=0;z<j;z++)
+                                k=j;
+                                z=0;
+                                num=0;
+                                while (buffer[k]==search[z] && z < strlen(search))
                                 {
-                                temp[z]=buffer[z];
+                                    num +=1;
+                                    k++;
+                                    z++;
                                 }
-                                temp[j] = '\0';
-                                strcat(temp,string);
-                                strcat(temp, buffer+j+strlen(search));
-                                for(k=0;k<strlen(buffer);k++)
+                                if (num == strlen(search) && (j + strlen(search) == strlen(buffer) || buffer[j + strlen(search)] == ' '))
                                 {
-                                    buffer[k]='\0';
+                                    for(z=0;z<j;z++)
+                                    {
+                                    temp[z]=buffer[z];
+                                    }
+                                    temp[j] = '\0';
+                                    strcat(temp,string);
+                                    strcat(temp, buffer+j+strlen(search));
+                                    for(k=0;k<strlen(buffer);k++)
+                                    {
+                                        buffer[k]='\0';
+                                    }
+                                    strcpy(buffer, temp);
                                 }
-                                strcpy(buffer, temp);
                             }
                         }
+                    }
+                    else
+                    {
+                        printf("Not enough space");
                     }
                     break;
                 case 4:
@@ -145,6 +163,41 @@
                     }
                     break;
                 case 7:
+                    printf("write the word that must be deleted: ");
+                    getchar();
+                    fgets(search, sizeof(search), stdin);
+                    search[strcspn(search, "\n")] = 0;
+                        for(j=0;j<strlen(buffer);j++)
+                        {
+                            if (buffer[j] == search[0] && (j==0 || buffer[j-1]==' '))
+                            {
+                                k=j;
+                                z=0;
+                                num=0;
+                                while (buffer[k]==search[z] && z < strlen(search))
+                                {
+                                    num +=1;
+                                    k++;
+                                    z++;
+                                }
+                                if (num == strlen(search) && (j + strlen(search) == strlen(buffer) || buffer[j + strlen(search)] == ' '))
+                                {
+                                    for(z=0;z<j;z++)
+                                    {
+                                    temp[z]=buffer[z];
+                                    }
+                                    temp[j] = '\0';
+                                    strcat(temp, buffer+j+strlen(search)+1);
+                                    for(k=0;k<strlen(buffer);k++)
+                                    {
+                                        buffer[k]='\0';
+                                    }
+                                    strcpy(buffer, temp);
+                                }
+                            }
+                        }
+                    break;
+                case 8:
                     return 0;
                 default:
                     printf("Invalid choice. Please choose a valid option.\n");
